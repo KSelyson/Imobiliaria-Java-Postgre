@@ -13,30 +13,27 @@ DECLARE
     v_contador INT := 1;
     v_data_vencimento DATE;
 BEGIN
-    -- 1. Inserir o novo Contrato (APENAS colunas obrigatórias ou existentes)
+
     INSERT INTO Contrato (
         fk_inquilino, fk_imovel, data_inicio, status
     )
     VALUES (
         p_fk_inquilino, p_fk_imovel, p_data_inicio, 'ativo'
     )
-    RETURNING id_contrato INTO v_id_contrato; -- Captura o ID gerado
+    RETURNING id_contrato INTO v_id_contrato;
 
-    -- 2. Loop para gerar as Parcelas (USANDO os parâmetros não armazenados no Contrato)
     WHILE v_contador <= p_duracao_meses LOOP
         
-        -- Cálculo da data de vencimento
         v_data_vencimento := (p_data_inicio + (v_contador || ' months')::INTERVAL);
         v_data_vencimento := DATE_TRUNC('month', v_data_vencimento) + (p_data_vencimento_dia - 1 || ' days')::INTERVAL;
         
-        -- Inserir a Parcela
         INSERT INTO Parcela (
             fk_contrato, numero_parcela, valor, data_vencimento, status
         )
         VALUES (
             v_id_contrato, 
             v_contador, 
-            p_valor_mensal, -- Usa o parâmetro aqui!
+            p_valor_mensal,
             v_data_vencimento, 
             'pendente'
         );
