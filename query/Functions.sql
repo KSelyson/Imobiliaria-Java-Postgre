@@ -34,29 +34,3 @@ BEGIN
 	RETURN v_juros;
 END;
 $$ LANGUAGE PLPGSQL;
-
--- Função a ser refeita 
-CREATE OR REPLACE FUNCTION fn_media_atraso_inquilino (IN id_inquilino_inserido INT)
-RETURNS NUMERIC(10,2) AS $$
-DECLARE
-	media_atraso numeric(10,2);
-BEGIN
-	SELECT 
-	COALESCE( 
-		AVG( 
-		CASE WHEN p.data_pagamento > p.data_vencimento THEN 
-			(p.data_pagamento - p.data_vencimento)
-		ELSE
-			0
-		END
-		), 0.00)
-	INTO media_atraso
-	FROM parcela p 
-	INNER JOIN contrato c ON p.fk_contrato = c.id_contrato
-	WHERE c.fk_inquilino = id_inquilino_inserido
-	AND status='pago';
-
-RETURN media_atraso;
-
-END;
-$$ LANGUAGE plpgsql;
