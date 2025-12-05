@@ -1,6 +1,6 @@
 -- == FUNCTIONS ==
 
--- Função para calcular o juros de atraso do pagamento
+-- 1. Função para calcular o juros de atraso do pagamento
 CREATE OR REPLACE FUNCTION fn_calcula_juros (IN id_p INT, IN data_pagamento_inserido DATE)
 RETURNS NUMERIC AS $$
 DECLARE
@@ -34,3 +34,23 @@ BEGIN
 	RETURN v_juros;
 END;
 $$ LANGUAGE PLPGSQL;
+
+
+-- 2. Função para somar todo o valor ainda pendente no contrato
+CREATE OR REPLACE FUNCTION fn_total_receber_contrato(
+    p_id_contrato INT
+)
+RETURNS NUMERIC(12,2) AS $$
+DECLARE
+    v_total NUMERIC(12,2);
+BEGIN
+    SELECT
+        COALESCE(SUM(valor), 0)
+    INTO v_total
+    FROM parcela
+    WHERE fk_contrato = p_id_contrato
+      AND status = 'pendente';
+
+    RETURN v_total;
+END;
+$$ LANGUAGE plpgsql;
