@@ -1,9 +1,11 @@
 package br.com.unifacisa.sql_poo.sistema_imobiliaria.controller;
 
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.InquilinoModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ProprietarioModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.InquilinoRepository;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ProprietarioRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,17 @@ public class ProprietarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Update
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable int id, @RequestBody @Valid ProprietarioModel proprietarioUpt) {
+        repository.findById(id)
+                .map(proprietario -> {
+                    proprietario.setId_proprietario(proprietarioUpt.getId_proprietario());
+                    return repository.save(proprietarioUpt);
+                })
+                .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "proprietario com id " + id + " não encontrado") );
+    }
 
     // Delete
     @DeleteMapping("/{id}")

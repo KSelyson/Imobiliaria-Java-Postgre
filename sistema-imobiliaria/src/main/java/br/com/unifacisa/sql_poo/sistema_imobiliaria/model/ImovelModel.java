@@ -8,32 +8,37 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "imovel")
 public class ImovelModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_imovel;
 
-    @Column
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "tipo_imovel")
     private TipoImovel tipo;
 
     @Column
     private String endereco;
 
     @Column
-    private double area_total;
+    private int area_total;
 
     @Column
     private int qtd_quartos;
 
     @Column
-    private double valor_aluguel;
+    private BigDecimal valor_aluguel;
 
-    @Column
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "status_imovel")
     private StatusImovel status;
 }

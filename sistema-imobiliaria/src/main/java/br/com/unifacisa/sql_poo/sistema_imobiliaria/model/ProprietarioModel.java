@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -14,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "proprietario")
 public class ProprietarioModel {
 
     @Id
@@ -23,7 +25,7 @@ public class ProprietarioModel {
     @Column
     private String nome_completo;
 
-    @Column
+    @Column(columnDefinition = "bpchar")
     private String cpf;
 
     @Column
@@ -37,5 +39,5 @@ public class ProprietarioModel {
 
     @Column
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date data_cadastro;
+    private LocalDate data_cadastro;
 }

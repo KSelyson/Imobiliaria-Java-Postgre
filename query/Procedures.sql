@@ -27,7 +27,7 @@ BEGIN
     VALUES (
         p_fk_inquilino,
         p_fk_imovel,
-        NULL,               
+        "NULL",               
         'ativo',            
         p_data_inicio,
         v_data_fim
@@ -66,3 +66,18 @@ EXCEPTION
         RAISE EXCEPTION 'Falha ao gerar contrato e parcelas.';
 END;
 $$ LANGUAGE plpgsql;
+
+CALL prc_gerar_contrato_e_parcelas(
+    -- p_fk_inquilino
+    1,
+    -- p_fk_imovel
+    1,
+    -- p_data_inicio
+    '2026-01-01'::DATE,
+    -- p_duracao_meses
+    12,
+    -- p_valor_mensal
+    1500.00,
+    -- p_dia_vencimento
+    5
+);

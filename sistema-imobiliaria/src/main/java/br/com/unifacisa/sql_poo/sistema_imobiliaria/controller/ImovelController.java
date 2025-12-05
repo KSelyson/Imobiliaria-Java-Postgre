@@ -1,9 +1,8 @@
 package br.com.unifacisa.sql_poo.sistema_imobiliaria.controller;
 
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
-import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.InquilinoModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ImovelRepository;
-import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.InquilinoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +47,17 @@ public class ImovelController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Update
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable int id, @RequestBody @Valid ImovelModel imovelUpt){
+        repository.findById(id)
+                .map(imovel -> {
+                    imovel.setId_imovel(imovelUpt.getId_imovel());
+                    return repository.save(imovelUpt);
+                })
+                .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "Imovel com id " + id + " não encontrado") );
+    }
 
     // Delete
     @DeleteMapping("/{id}")

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -14,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "contrato")
 public class ContratoModel {
 
     @Id
@@ -22,11 +24,11 @@ public class ContratoModel {
 
     @Column
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date data_inicio;
+    private LocalDate data_inicio;
     
     @Column
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date data_fim;
+    private LocalDate data_fim;
 
     @Column
     private String status;

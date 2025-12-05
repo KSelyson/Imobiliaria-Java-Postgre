@@ -65,7 +65,7 @@ CREATE TABLE Contrato (
 	data_inicio DATE NOT NULL,
 	data_fim DATE NOT NULL,
 	status status_contrato NOT NULL,
-	clausulas TEXT NOT NULL,
+	clausulas TEXT,
 	fk_inquilino INT NOT NULL,
 	fk_proprietario INT NOT NULL,
 	fk_imovel INT NOT NULL

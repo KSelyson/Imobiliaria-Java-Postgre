@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.nio.channels.spi.SelectorProvider;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "inquilino")
 public class InquilinoModel {
 
     @Id
@@ -24,7 +26,7 @@ public class InquilinoModel {
     @Column
     private String nome_completo;
 
-    @Column
+    @Column(columnDefinition = "bpchar")
     private String cpf;
 
     @Column
@@ -35,9 +37,9 @@ public class InquilinoModel {
 
     @Column
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date data_nascimento;
+    private LocalDate data_nascimento;
 
     @Column
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date data_cadastro;
+    private LocalDate data_cadastro;
 }
