@@ -12,7 +12,7 @@ CREATE TYPE status_parcela AS ENUM ('pago', 'pendente');
 CREATE TABLE Proprietario (
 	id_proprietario INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nome_completo VARCHAR(255) NOT NULL,
-	cpf CHAR(11) NOT NULL UNIQUE,
+	cpf VARCHAR(11) NOT NULL UNIQUE,
 	telefone VARCHAR(15) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	endereco VARCHAR(255),
@@ -23,7 +23,7 @@ CREATE TABLE Proprietario (
 CREATE TABLE Inquilino (
 	id_inquilino INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nome_completo VARCHAR(255) NOT NULL,
-	cpf CHAR(11) NOT NULL UNIQUE,
+	cpf VARCHAR(11) NOT NULL UNIQUE,
 	telefone VARCHAR(15) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	data_nascimento DATE NOT NULL,
