@@ -3,6 +3,7 @@ package br.com.unifacisa.sql_poo.sistema_imobiliaria.controller;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.InquilinoModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ProprietarioModel;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.dto.ProprietarioDTO;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.InquilinoRepository;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ProprietarioRepository;
 import jakarta.validation.Valid;
@@ -25,14 +26,6 @@ public class ProprietarioController {
         this.repository = repository;
     }
 
-    // Post
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProprietarioModel> create(@RequestBody ProprietarioModel proprietario) {
-        ProprietarioModel saved = repository.save(proprietario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-    }
-
     // Get Geral
     @GetMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -50,14 +43,39 @@ public class ProprietarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Post
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ProprietarioModel> create(@RequestBody ProprietarioDTO dto) {
+        ProprietarioModel proprietario = new ProprietarioModel();
+
+        proprietario.setNome_completo(dto.getNome_completo());
+        proprietario.setCpf(dto.getCpf());
+        proprietario.setTelefone(dto.getTelefone());
+        proprietario.setEmail(dto.getEmail());
+        proprietario.setEndereco(dto.getEndereco());
+        proprietario.setData_cadastro(dto.getData_cadastro());
+        repository.save(proprietario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(proprietario);
+    }
+
     // Update
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable int id, @RequestBody @Valid ProprietarioModel proprietarioUpt) {
+    public void update(@PathVariable int id, @RequestBody @Valid ProprietarioDTO dto) {
+
         repository.findById(id)
                 .map(proprietario -> {
-                    proprietario.setId_proprietario(proprietarioUpt.getId_proprietario());
-                    return repository.save(proprietarioUpt);
+
+                    proprietario.setNome_completo(dto.getNome_completo());
+                    proprietario.setCpf(dto.getCpf());
+                    proprietario.setTelefone(dto.getTelefone());
+                    proprietario.setEmail(dto.getEmail());
+                    proprietario.setEndereco(dto.getEndereco());
+                    proprietario.setData_cadastro(dto.getData_cadastro());
+
+                    return repository.save(proprietario);
                 })
                 .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "proprietario com id " + id + " não encontrado") );
     }

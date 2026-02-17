@@ -1,0 +1,21 @@
+# Vídeos e documentos
+*.mkv
+*.mp4
+*.avi
+*.pdf
+*.docx
+*.pptx
+
+# Build Java
+target/
+bin/
+out/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,6 +1,7 @@
 package br.com.unifacisa.sql_poo.sistema_imobiliaria.controller;
 
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.dto.ImovelDTO;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ImovelRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,6 @@ public class ImovelController {
         this.repository = repository;
     }
 
-    // Post
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ImovelModel> create(@RequestBody ImovelModel imovel) {
-        ImovelModel saved = repository.save(imovel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-    }
-
     // Get Geral
     @GetMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -47,14 +40,40 @@ public class ImovelController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Post
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ImovelModel> create(@RequestBody ImovelDTO dto) {
+
+        ImovelModel imovel = new ImovelModel();
+
+        imovel.setTipo(dto.getTipo());
+        imovel.setEndereco(dto.getEndereco());
+        imovel.setArea_total(dto.getArea_total());
+        imovel.setQtd_quartos(dto.getQtd_quartos());
+        imovel.setValor_aluguel(dto.getValor_aluguel());
+        imovel.setStatus(dto.getStatus());
+
+        repository.save(imovel);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(imovel);
+    }
+
     // Update
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable int id, @RequestBody @Valid ImovelModel imovelUpt){
+    public void update(@PathVariable int id, @RequestBody @Valid ImovelDTO dto){
         repository.findById(id)
                 .map(imovel -> {
-                    imovel.setId_imovel(imovelUpt.getId_imovel());
-                    return repository.save(imovelUpt);
+
+                    imovel.setTipo(dto.getTipo());
+                    imovel.setEndereco(dto.getEndereco());
+                    imovel.setArea_total(dto.getArea_total());
+                    imovel.setQtd_quartos(dto.getQtd_quartos());
+                    imovel.setValor_aluguel(dto.getValor_aluguel());
+                    imovel.setStatus(dto.getStatus());
+
+                    return repository.save(imovel);
                 })
                 .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "Imovel com id " + id + " não encontrado") );
     }

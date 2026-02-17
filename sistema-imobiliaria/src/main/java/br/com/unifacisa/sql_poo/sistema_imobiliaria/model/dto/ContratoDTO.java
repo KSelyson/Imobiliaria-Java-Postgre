@@ -1,51 +1,45 @@
-package br.com.unifacisa.sql_poo.sistema_imobiliaria.model;
+package br.com.unifacisa.sql_poo.sistema_imobiliaria.model.dto;
 
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.InquilinoModel;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ProprietarioModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.enums.StatusContrato;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "contrato")
-public class ContratoModel {
+public class ContratoDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_contrato;
-
-    @Column
+    @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_inicio;
-    
-    @Column
+
+    @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_fim;
 
-    @Column
+    @NotBlank
     private StatusContrato status;
 
-    @Column
+    @NotBlank
     private String clausulas;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_inquilino",  referencedColumnName = "id_inquilino")
+    @NotNull
     private InquilinoModel inquilino;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_proprietario", referencedColumnName = "id_proprietario")
+    @NotNull
     private ProprietarioModel proprietario;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_imovel", referencedColumnName = "id_imovel")
+    @NotNull
     private ImovelModel imovel;
 }

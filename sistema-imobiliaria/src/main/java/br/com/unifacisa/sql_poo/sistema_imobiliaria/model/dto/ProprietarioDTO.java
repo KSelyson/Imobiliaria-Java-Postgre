@@ -1,43 +1,30 @@
-package br.com.unifacisa.sql_poo.sistema_imobiliaria.model;
+package br.com.unifacisa.sql_poo.sistema_imobiliaria.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "proprietario")
-public class ProprietarioModel {
+public class ProprietarioDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_proprietario;
-
-    @Column
     private String nome_completo;
 
-    @Column(columnDefinition = "bpchar")
     private String cpf;
 
-    @Column
     private String telefone;
 
-    @Column
     private String email;
 
-    @Column
     private String endereco;
 
-    @Column
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_cadastro;
 }

@@ -3,6 +3,7 @@ package br.com.unifacisa.sql_poo.sistema_imobiliaria.controller;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.InquilinoModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ProprietarioModel;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.dto.InquilinoDTO;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.InquilinoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,7 @@ public class InquilinoController {
         this.repository = repository;
     }
 
-    // Post
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<InquilinoModel> create(@RequestBody InquilinoModel inquilino) {
-        InquilinoModel saved = repository.save(inquilino);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-    }
-
+    // SAFE
     // Get Geral
     @GetMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -39,6 +33,7 @@ public class InquilinoController {
         List<InquilinoModel> inquilinos = repository.findAll();
         return ResponseEntity.ok(inquilinos);
     }
+
 
     // Get por ID
     @GetMapping("/{id}")
@@ -49,14 +44,41 @@ public class InquilinoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Post
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<InquilinoModel> create(@RequestBody InquilinoDTO dto) {
+
+        InquilinoModel inquilino = new InquilinoModel();
+
+        inquilino.setNome_completo(dto.getNome_completo());
+        inquilino.setCpf(dto.getCpf());
+        inquilino.setTelefone(dto.getTelefone());
+        inquilino.setEmail(dto.getEmail());
+        inquilino.setData_nascimento(dto.getData_nascimento());
+        inquilino.setData_cadastro(dto.getData_cadastro());
+
+        repository.save(inquilino);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(inquilino);
+    }
+
     // Update
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable int id, @RequestBody @Valid InquilinoModel inquilinoUpt) {
+    public void update(@PathVariable int id, @RequestBody @Valid InquilinoDTO dto) {
         repository.findById(id)
                 .map(inquilino -> {
-                    inquilino.setId_inquilino(inquilinoUpt.getId_inquilino());
-                    return repository.save(inquilinoUpt);
+
+                    inquilino.setNome_completo(dto.getNome_completo());
+                    inquilino.setCpf(dto.getCpf());
+                    inquilino.setTelefone(dto.getTelefone());
+                    inquilino.setEmail(dto.getEmail());
+                    inquilino.setData_nascimento(dto.getData_nascimento());
+                    inquilino.setData_cadastro(dto.getData_cadastro());
+
+
+                    return repository.save(inquilino);
                 })
                 .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "proprietario com id " + id + " não encontrado") );
     }
