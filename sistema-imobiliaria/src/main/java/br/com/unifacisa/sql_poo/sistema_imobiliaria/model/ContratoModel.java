@@ -31,6 +31,7 @@ public class ContratoModel {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_fim;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private StatusContrato status;
 

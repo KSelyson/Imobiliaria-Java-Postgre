@@ -3,6 +3,8 @@ package br.com.unifacisa.sql_poo.sistema_imobiliaria.controller;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.ImovelModel;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.model.dto.ImovelDTO;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ImovelRepository;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.service.ContratoService;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.service.ImovelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,78 +18,47 @@ import java.util.List;
 @RequestMapping("/api/imovel")
 public class ImovelController {
 
-    private final ImovelRepository repository;
+    private final ImovelService imovelService;
 
     @Autowired
-    public ImovelController(ImovelRepository repository) {
-        this.repository = repository;
+    public ImovelController(ImovelService imovelService) {
+        this.imovelService = imovelService;
     }
 
     // Get Geral
     @GetMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<List<ImovelModel>> findAll() {
-        List<ImovelModel> imovels = repository.findAll();
-        return ResponseEntity.ok(imovels);
+        //Já retorna a lista do service
+        return ResponseEntity.ok(imovelService.findAll());
     }
 
     // Get por ID
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<ImovelModel> findById(@PathVariable int id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        //Cria um objeto e chama o service
+        ImovelModel imovel = imovelService.findById(id);
+        return ResponseEntity.ok(imovel);
     }
 
     // Post
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ImovelModel> create(@RequestBody ImovelDTO dto) {
-
-        ImovelModel imovel = new ImovelModel();
-
-        imovel.setTipo(dto.getTipo());
-        imovel.setEndereco(dto.getEndereco());
-        imovel.setArea_total(dto.getArea_total());
-        imovel.setQtd_quartos(dto.getQtd_quartos());
-        imovel.setValor_aluguel(dto.getValor_aluguel());
-        imovel.setStatus(dto.getStatus());
-
-        repository.save(imovel);
-
+        //Cria um objeto e manda para o service
+        ImovelModel imovel = imovelService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(imovel);
     }
 
     // Update
     @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable int id, @RequestBody @Valid ImovelDTO dto){
-        repository.findById(id)
-                .map(imovel -> {
-
-                    imovel.setTipo(dto.getTipo());
-                    imovel.setEndereco(dto.getEndereco());
-                    imovel.setArea_total(dto.getArea_total());
-                    imovel.setQtd_quartos(dto.getQtd_quartos());
-                    imovel.setValor_aluguel(dto.getValor_aluguel());
-                    imovel.setStatus(dto.getStatus());
-
-                    return repository.save(imovel);
-                })
-                .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "Imovel com id " + id + " não encontrado") );
+        imovelService.update(id, dto);
     }
 
     // Delete
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id){
-        repository
-                .findById(id)
-                .map( imovel -> {
-                    repository.delete(imovel);
-                    return Void.TYPE;
-                })
-                .orElseThrow( () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "Imovel com id " + id + " não encontrado") );
+        imovelService.delete(id);
     }
 }

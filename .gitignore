@@ -1,21 +1,38 @@
-# Vídeos e documentos
-*.mkv
-*.mp4
-*.avi
-*.pdf
-*.docx
-*.pptx
-
-# Build Java
+HELP.md
 target/
-bin/
-out/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# IDEs
-.idea/
-.vscode/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
+*.ipr
 
-# Sistema
-.DS_Store
-Thumbs.db
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/

@@ -9,6 +9,7 @@ import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ContratoRepositor
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ImovelRepository;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.InquilinoRepository;
 import br.com.unifacisa.sql_poo.sistema_imobiliaria.repository.ProprietarioRepository;
+import br.com.unifacisa.sql_poo.sistema_imobiliaria.service.ContratoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,19 +28,20 @@ public class ContratoController {
     private final ImovelRepository imovelRepository;
     private final InquilinoRepository inquilinoRepository;
     private final ProprietarioRepository proprietarioRepository;
+    private final ContratoService contratoService;
 
     @Autowired
     public ContratoController(ContratoRepository repository, ImovelRepository imovelRepository, InquilinoRepository inquilinoRepository
-    , ProprietarioRepository proprietarioRepository) {
+    , ProprietarioRepository proprietarioRepository, ContratoService contratoService) {
         this.repository = repository;
         this.imovelRepository = imovelRepository;
         this.inquilinoRepository = inquilinoRepository;
         this.proprietarioRepository = proprietarioRepository;
+        this.contratoService = contratoService;
     }
 
-    //GET
+    //GET geral
     @GetMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<List<ContratoModel>> findAll() {
         List<ContratoModel> contratos = repository.findAll();
         return ResponseEntity.ok(contratos);
@@ -48,11 +50,9 @@ public class ContratoController {
 
     //GET por ID
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<ContratoModel> findById(@PathVariable int id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        ContratoModel contrato = contratoService.findById(id);
+        return ResponseEntity.ok(contrato);
     }
 
     //POST
